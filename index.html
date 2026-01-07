@@ -1,412 +1,455 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
   <title>GPX — Generative Price Experiment</title>
-  <meta name="description" content="GPX — an on-chain price experiment on Solana. No utility. No roadmap. No promises." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="GPX is an on-chain price experiment on Solana. Observation only. No utility. No roadmap. No promises." />
 
   <style>
     :root{
-      --bg:#07070b;
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.08);
-      --stroke:rgba(255,255,255,.14);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.62);
-      --muted2:rgba(255,255,255,.48);
-
-      --g1:#14F195;
-      --g2:#9945FF;
-      --g3:#00D1FF;
-
-      --shadow:0 18px 60px rgba(0,0,0,.55);
-      --r:22px;
+      --bg:#0b0b0c;
+      --panel:#101012;
+      --text:#f2f2f2;
+      --muted:#b7b7b7;
+      --line:#1f1f22;
+      --focus:#ffffff;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius2: 22px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 800px at 15% 20%, rgba(153,69,255,.18), transparent 55%),
-        radial-gradient(1000px 700px at 75% 70%, rgba(20,241,149,.14), transparent 55%),
-        radial-gradient(900px 600px at 65% 15%, rgba(0,209,255,.10), transparent 55%),
-        var(--bg);
-      overflow-x:hidden;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 700px at 20% 0%, #111115 0%, var(--bg) 55%, #070708 100%);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    .glow-lines{
-      position:fixed; inset:-2px;
-      pointer-events:none;
-      background:
-        radial-gradient(800px 240px at 20% 10%, rgba(153,69,255,.22), transparent 60%),
-        radial-gradient(900px 280px at 70% 60%, rgba(20,241,149,.18), transparent 60%);
-      filter:blur(18px);
-      opacity:.85;
-      z-index:0;
-    }
-
+    a{ color: var(--text); text-underline-offset: 3px; }
+    a:hover{ opacity:.9; }
     .wrap{
-      position:relative; z-index:1;
-      max-width:1100px;
-      margin:0 auto;
-      padding:22px 18px 54px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
     }
 
     header{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:14px;
-      padding:16px 18px;
-      border-radius:var(--r);
-      background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
+      gap:16px;
+      padding: 10px 0 22px;
     }
 
     .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width:240px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width: 0;
     }
 
     .logo{
-      width:84px; height:84px;
-      border-radius:18px;
-      object-fit:contain;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:0 10px 30px rgba(0,0,0,.45);
-      flex:0 0 auto;
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: #0d0d0f;
     }
 
-    .brand .t{display:flex; flex-direction:column; line-height:1.15}
-    .brand .name{font-weight:700; letter-spacing:.2px; font-size:16px}
-    .brand .sub{font-size:12px; color:var(--muted); margin-top:2px}
-
-    .nav{
-      display:flex; align-items:center; gap:10px;
-      flex-wrap:wrap; justify-content:flex-end;
+    .brand h1{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .2px;
+      font-weight: 650;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .brand p{
+      margin:2px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
 
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    @media (max-width: 860px){
+      nav{ justify-content:flex-start; }
     }
 
-    .dot{
-      width:8px;height:8px;border-radius:999px;
-      background:linear-gradient(90deg,var(--g1),var(--g2));
-      box-shadow:0 0 0 3px rgba(153,69,255,.16);
-    }
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
+    .chip{
+      display:inline-flex;
+      align-items:center;
       gap:8px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      font-size:13px;
-      font-weight:600;
-      cursor:pointer;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(16,16,18,.55);
+      backdrop-filter: blur(10px);
       text-decoration:none;
-      user-select:none;
-      transition:transform .08s ease, background .15s ease, border-color .15s ease;
-      white-space:nowrap;
+      font-size: 13px;
+      color: var(--text);
     }
-    .btn:hover{background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18)}
-    .btn:active{transform:translateY(1px)}
-    .btn.primary{
-      border:none;
-      background:linear-gradient(90deg, rgba(20,241,149,.95), rgba(153,69,255,.95));
-      color:#0b0b10;
-      box-shadow:0 18px 45px rgba(153,69,255,.16);
+    .chip:focus-visible{ outline: 2px solid var(--focus); outline-offset: 2px; }
+
+    .hero{
+      padding: 28px 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius2);
+      background: rgba(16,16,18,.65);
+      box-shadow: var(--shadow);
+    }
+    .hero h2{
+      margin:0 0 10px;
+      font-size: 34px;
+      letter-spacing: -0.6px;
+      line-height: 1.1;
+    }
+    .hero .sub{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 70ch;
+    }
+    .hero .meta{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+    .pill{
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(12,12,14,.6);
     }
 
-    main{
-      margin-top:18px;
+    .grid{
       display:grid;
-      grid-template-columns: 1.25fr .95fr;
-      gap:16px;
-      align-items:start;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
     }
 
     .card{
-      border-radius:var(--r);
-      background:linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
-      padding:18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16,16,18,.55);
+      padding: 18px 18px 16px;
     }
-
-    .hero .badge{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      color:var(--muted);
-      font-size:12px;
+    .card h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing: .2px;
+      font-weight: 650;
     }
-
-    h1{
-      margin:14px 0 10px;
-      font-size:44px;
-      line-height:1.05;
-      letter-spacing:-0.6px;
-    }
-    .gpx{
-      background:linear-gradient(90deg,var(--g1),var(--g2));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    .lead{
+    .card p{
       margin:0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.55;
-      max-width:62ch;
+      color: var(--muted);
+      font-size: 14px;
     }
 
-    .actions{
-      margin-top:16px;
+    .mono{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      word-break: break-all;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(10,10,12,.8);
+      margin-top: 10px;
+    }
+
+    .btnrow{
       display:flex;
       gap:10px;
-      flex-wrap:wrap;
+      margin-top: 10px;
+      flex-wrap: wrap;
     }
 
-    .side{
-      display:flex;
-      flex-direction:column;
-      gap:16px;
+    button{
+      appearance:none;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      cursor:pointer;
+    }
+    button:hover{ background: rgba(255,255,255,.09); }
+    button:active{ transform: translateY(1px); }
+    button:focus-visible{ outline: 2px solid var(--focus); outline-offset: 2px; }
+
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
     }
 
-    .side h3{
-      margin:0 0 10px;
-      font-size:14px;
-      letter-spacing:.2px;
-    }
-
-    .mint{
-      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
-      font-size:12px;
-      color:rgba(255,255,255,.78);
-      background:rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.10);
-      padding:10px 12px;
-      border-radius:14px;
-      overflow:auto;
-      word-break:break-all;
-    }
-
-    .tags{
-      margin-top:12px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .tag{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      color:var(--muted);
-      font-size:12px;
+    .section{
+      margin-top: 14px;
     }
 
     .list{
-      margin:0;
-      padding-left:18px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
     }
-    .list li{margin:6px 0}
+    .list li{ margin: 6px 0; }
 
-    .about p{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.55;
-    }
-
-    .principles{
-      grid-column:1 / -1;
-      padding:18px;
-    }
-    .principles h2{
-      margin:0 0 12px;
-      font-size:18px;
-      letter-spacing:.2px;
-    }
-    .grid3{
+    .kvs{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 10px;
     }
-    .pbox{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      padding:14px;
-      min-height:92px;
+
+    .kv{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 12px;
+      background: rgba(10,10,12,.55);
     }
-    .pbox b{display:block; margin-bottom:6px; font-size:13px}
-    .pbox span{color:var(--muted); font-size:13px; line-height:1.35}
+    .kv b{
+      display:block;
+      font-size: 12px;
+      letter-spacing: .2px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .kv span{
+      color: var(--muted);
+      font-size: 13px;
+    }
 
     footer{
-      margin-top:22px;
-      text-align:center;
-      color:rgba(255,255,255,.45);
-      font-size:12px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    @media (max-width: 940px){
-      main{grid-template-columns:1fr}
-      h1{font-size:38px}
-      .brand{min-width:0}
-      .grid3{grid-template-columns:1fr}
-      header{align-items:flex-start}
-      .nav{justify-content:flex-start}
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(10,10,12,.92);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 13px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
     }
   </style>
 </head>
 
 <body>
-  <div class="glow-lines"></div>
-
   <div class="wrap">
     <header>
-      <div class="brand">
+      <div class="brand" aria-label="GPX site header">
         <img class="logo" src="logo.jpg" alt="GPX logo" />
-        <div class="t">
-          <div class="name">GPX</div>
-          <div class="sub">Generative Price Experiment</div>
+        <div style="min-width:0">
+          <h1>GPX — Generative Price Experiment</h1>
+          <p>On-chain observation on Solana</p>
         </div>
       </div>
 
-      <div class="nav">
-        <div class="pill"><span class="dot"></span> Solana • On-chain</div>
-        <a class="btn" href="#about">About</a>
-        <a class="btn primary" href="#mint">Mint</a>
-      </div>
+      <nav aria-label="Primary links">
+        <a class="chip" href="https://x.com/GpxPrice" target="_blank" rel="noopener noreferrer">X</a>
+        <a class="chip" href="https://github.com/gpx-experiment/gpx-site" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="chip" href="#mint">Mint</a>
+        <a class="chip" href="#rules">Rules</a>
+      </nav>
     </header>
 
     <main>
-      <!-- LEFT: Hero -->
-      <section class="card hero" id="about">
-        <div class="badge"><span class="dot"></span> No utility • No roadmap • No promises</div>
-
-        <h1><span class="gpx">GPX</span> — on-chain<br/>price experiment.</h1>
-
-        <p class="lead">
-          Pure market mechanics: liquidity, time, and behavior. No utility claims. No expectations.
-          Just observation on Solana.
+      <section class="hero" aria-label="Hero">
+        <h2>Observation, not a product.</h2>
+        <p class="sub">
+          GPX is an on-chain price experiment on Solana. It is presented for inspection and documentation.
+          No utility. No roadmap. No promises. No profit expectations.
         </p>
-
-        <div class="actions">
-          <button class="btn primary" id="copyBtn">Copy Mint</button>
-          <a class="btn" href="https://x.com/GpxPrice" target="_blank" rel="noopener">X (Twitter)</a>
-          <a class="btn" href="https://github.com/gpx-experiment/gpx-site" target="_blank" rel="noopener">GitHub</a>
+        <div class="meta" aria-label="Project attributes">
+          <span class="pill">Solana</span>
+          <span class="pill">Experiment / Observation</span>
+          <span class="pill">Verification-first</span>
         </div>
       </section>
 
-      <!-- RIGHT: Side stack (restored blocks) -->
-      <aside class="side">
-        <div class="card" id="mint">
+      <section class="grid" aria-label="Primary content">
+        <div class="card section" id="mint" aria-label="Mint address">
           <h3>Mint address</h3>
-          <div class="mint" id="mintText">G6VkMZDzFZ9jYgrSZXipMdohX3txQwf1hSnY1vSwqGV</div>
-          <div class="tags">
-            <span class="tag">SPL</span>
-            <span class="tag">Solana</span>
-            <span class="tag">Experimental</span>
+          <p>Use this address to verify the asset on explorers and tools.</p>
+
+          <div class="mono" id="mintValue" aria-label="Mint address value">
+            G6VkVMZdfz9iYgrSZXipNdohX3txQwfb1hSnY1vSwqGV
+          </div>
+
+          <div class="btnrow" aria-label="Mint actions">
+            <button type="button" id="copyMintBtn">Copy Mint</button>
+            <a class="chip" id="solscanLink"
+               href="https://solscan.io/token/G6VkVMZdfz9iYgrSZXipNdohX3txQwfb1hSnY1vSwqGV"
+               target="_blank" rel="noopener noreferrer">View on Solscan</a>
+          </div>
+
+          <div class="small">
+            Tip: always compare the mint address across multiple sources.
           </div>
         </div>
 
-        <div class="card">
-          <h3>What this means</h3>
-          <ul class="list">
-            <li>No promised returns.</li>
-            <li>No “utility” and no roadmap.</li>
-            <li>Only observation: <b>price ↔ liquidity ↔ time</b>.</li>
-          </ul>
-        </div>
+        <aside class="card section" aria-label="Principles">
+          <h3>Principles</h3>
+          <div class="kvs">
+            <div class="kv">
+              <b>Mechanics</b>
+              <span>Documented behavior over time is the point. Claims are not.</span>
+            </div>
+            <div class="kv">
+              <b>Liquidity</b>
+              <span>Observed as part of the experiment context, not promoted.</span>
+            </div>
+            <div class="kv">
+              <b>Time</b>
+              <span>Measurements matter more than narratives. Patience is built-in.</span>
+            </div>
+          </div>
+        </aside>
+      </section>
 
-        <div class="card about">
-          <h3>About the experiment</h3>
-          <p>
-            GPX is a minimal on-chain page used to document a price experiment on Solana.
-            The goal is to keep the narrative close to zero and focus on what markets actually do.
-          </p>
-        </div>
-      </aside>
+      <section class="card section" id="what" aria-label="What is GPX">
+        <h3>What is GPX?</h3>
+        <p>
+          GPX is an on-chain price experiment deployed on Solana.
+          The website exists to provide a stable reference point (mint + links + constraints) so anyone can verify what is being discussed.
+        </p>
+      </section>
 
-      <!-- Bottom: Principles -->
-      <section class="card principles">
-        <h2>Principles</h2>
-        <div class="grid3">
-          <div class="pbox">
-            <b>Mechanics</b>
-            <span>How price behaves without narrative noise.</span>
-          </div>
-          <div class="pbox">
-            <b>Liquidity</b>
-            <span>The real physics of markets.</span>
-          </div>
-          <div class="pbox">
-            <b>Time</b>
-            <span>Expectations, cycles, reactions.</span>
-          </div>
+      <section class="card section" id="rules" aria-label="Rules and constraints">
+        <h3>Rules &amp; Constraints</h3>
+        <ul class="list">
+          <li><b>No utility.</b> It is not a product and does not promise functionality.</li>
+          <li><b>No roadmap.</b> No timeline commitments or “coming soon” statements.</li>
+          <li><b>No promises.</b> No guarantees of outcomes of any kind.</li>
+          <li><b>No profit expectations.</b> Not presented as an investment.</li>
+          <li><b>No marketing language.</b> This page avoids hype by design.</li>
+        </ul>
+      </section>
+
+      <section class="card section" id="observed" aria-label="What is being observed">
+        <h3>What is being observed?</h3>
+        <ul class="list">
+          <li>How on-chain price discovery behaves under constraints.</li>
+          <li>How time and market structure influence observed behavior.</li>
+          <li>The behavior of algorithmic and AI-assisted trading activity as an observable on-chain factor.</li>
+          <li>How verifiable references reduce ambiguity in public discussion.</li>
+        </ul>
+        <p class="small">
+          Notes: This site does not publish price, targets, or performance claims.
+        </p>
+      </section>
+
+      <section class="card section" aria-label="Links">
+        <h3>Links</h3>
+        <div class="btnrow" style="margin-top:8px">
+          <a class="chip" href="https://x.com/GpxPrice" target="_blank" rel="noopener noreferrer">X: @GpxPrice</a>
+          <a class="chip" href="https://github.com/gpx-experiment/gpx-site" target="_blank" rel="noopener noreferrer">GitHub: gpx-site</a>
+          <a class="chip" href="https://solscan.io/token/G6VkVMZdfz9iYgrSZXipNdohX3txQwfb1hSnY1vSwqGV" target="_blank" rel="noopener noreferrer">Solscan (Mint)</a>
         </div>
       </section>
-    </main>
 
-    <footer>© 2026 GPX • Hosted on GitHub Pages</footer>
+      <footer aria-label="Footer">
+        <div>GPX — Generative Price Experiment</div>
+        <div>Verification-first reference page • GitHub Pages</div>
+      </footer>
+    </main>
   </div>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
-    // Copy mint
-    const mint = document.getElementById("mintText").textContent.trim();
-    const btn = document.getElementById("copyBtn");
+    (function(){
+      const MINT = "G6VkVMZdfz9iYgrSZXipNdohX3txQwfb1hSnY1vSwqGV";
 
-    btn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(mint);
-        const old = btn.textContent;
-        btn.textContent = "Copied ✓";
-        setTimeout(() => (btn.textContent = old), 1200);
-      } catch (e) {
-        const t = document.createElement("textarea");
-        t.value = mint;
-        document.body.appendChild(t);
-        t.select();
-        document.execCommand("copy");
-        document.body.removeChild(t);
+      const mintEl = document.getElementById("mintValue");
+      const btn = document.getElementById("copyMintBtn");
+      const toast = document.getElementById("toast");
+      const solscanLink = document.getElementById("solscanLink");
 
-        const old = btn.textContent;
-        btn.textContent = "Copied ✓";
-        setTimeout(() => (btn.textContent = old), 1200);
+      // Ensure mint is consistent everywhere.
+      mintEl.textContent = MINT;
+      solscanLink.href = "https://solscan.io/token/" + MINT;
+
+      function showToast(msg){
+        toast.textContent = msg;
+        toast.classList.add("show");
+        window.clearTimeout(showToast._t);
+        showToast._t = window.setTimeout(() => toast.classList.remove("show"), 1600);
       }
-    });
+
+      async function copyText(text){
+        // Modern API
+        if (navigator.clipboard && window.isSecureContext){
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        // Fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        ta.style.top = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
+        document.body.removeChild(ta);
+        return ok;
+      }
+
+      btn.addEventListener("click", async () => {
+        const ok = await copyText(MINT);
+        showToast(ok ? "Mint copied." : "Copy failed.");
+      });
+    })();
   </script>
 </body>
 </html>
