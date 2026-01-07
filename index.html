@@ -9,11 +9,11 @@
 
   <style>
     :root{
-      --bg0:#070709;
+      --bg0:#060607;
       --bg1:#0b0b0c;
 
-      --panel: rgba(16,16,18,.68);
-      --panel2: rgba(10,10,12,.72);
+      --panel: rgba(16,16,18,.78);
+      --panel2: rgba(10,10,12,.82);
 
       --text:#f2f2f2;
       --muted:#b7b7b7;
@@ -27,11 +27,11 @@
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
 
-      /* Solana-like accent hues */
+      /* Solana-like hues */
       --a1: #14F195; /* green */
       --a2: #00C2FF; /* cyan */
       --a3: #9945FF; /* purple */
-      --a4: #FF2BD6; /* magenta-ish */
+      --a4: #FF2BD6; /* magenta */
     }
 
     *{ box-sizing:border-box; }
@@ -44,18 +44,18 @@
       line-height: 1.45;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-
-      /* base */
-      background:
-        radial-gradient(1100px 700px at 20% 0%, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 60%),
-        radial-gradient(900px 600px at 85% 10%, rgba(153,69,255,.10) 0%, rgba(153,69,255,0) 60%),
-        radial-gradient(1200px 900px at 50% 120%, rgba(20,241,149,.10) 0%, rgba(20,241,149,0) 60%),
-        linear-gradient(180deg, var(--bg1) 0%, var(--bg0) 60%, #050506 100%);
       overflow-x:hidden;
       position: relative;
+
+      /* calmer base */
+      background:
+        radial-gradient(900px 650px at 20% 0%, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 62%),
+        radial-gradient(900px 650px at 85% 0%, rgba(153,69,255,.08) 0%, rgba(153,69,255,0) 68%),
+        radial-gradient(1000px 760px at 55% 120%, rgba(20,241,149,.08) 0%, rgba(20,241,149,0) 70%),
+        linear-gradient(180deg, var(--bg1) 0%, var(--bg0) 65%, #040405 100%);
     }
 
-    /* ===== Solana-style streaks layer (like your 2nd image) ===== */
+    /* ===== Background streaks (now SUBTLE + masked away from main content area) ===== */
     body::before{
       content:"";
       position: fixed;
@@ -63,56 +63,60 @@
       pointer-events:none;
       z-index: 0;
 
-      /* horizontal neon streaks */
       background:
-        /* streak 1 */
         linear-gradient(90deg,
           rgba(0,0,0,0) 0%,
           rgba(20,241,149,.0) 18%,
-          rgba(20,241,149,.45) 28%,
-          rgba(0,194,255,.55) 38%,
-          rgba(153,69,255,.55) 52%,
-          rgba(255,43,214,.35) 64%,
-          rgba(0,0,0,0) 78%
-        ) 0 22% / 100% 2px no-repeat,
+          rgba(20,241,149,.35) 30%,
+          rgba(0,194,255,.40) 44%,
+          rgba(153,69,255,.40) 58%,
+          rgba(255,43,214,.22) 70%,
+          rgba(0,0,0,0) 86%
+        ) 0 24% / 100% 2px no-repeat,
 
-        /* streak 2 */
         linear-gradient(90deg,
           rgba(0,0,0,0) 0%,
           rgba(153,69,255,.0) 20%,
-          rgba(153,69,255,.55) 34%,
-          rgba(0,194,255,.55) 46%,
-          rgba(20,241,149,.45) 58%,
-          rgba(0,0,0,0) 78%
-        ) 0 35% / 100% 3px no-repeat,
-
-        /* streak 3 */
-        linear-gradient(90deg,
-          rgba(0,0,0,0) 0%,
-          rgba(0,194,255,.0) 16%,
-          rgba(0,194,255,.50) 28%,
-          rgba(153,69,255,.55) 42%,
-          rgba(20,241,149,.50) 60%,
+          rgba(153,69,255,.38) 35%,
+          rgba(0,194,255,.38) 48%,
+          rgba(20,241,149,.30) 62%,
           rgba(0,0,0,0) 82%
-        ) 0 52% / 100% 2px no-repeat,
+        ) 0 46% / 100% 3px no-repeat,
 
-        /* streak 4 */
         linear-gradient(90deg,
           rgba(0,0,0,0) 0%,
-          rgba(20,241,149,.0) 14%,
-          rgba(20,241,149,.55) 26%,
-          rgba(255,43,214,.35) 40%,
-          rgba(153,69,255,.55) 54%,
-          rgba(0,194,255,.55) 70%,
+          rgba(0,194,255,.0) 18%,
+          rgba(0,194,255,.34) 32%,
+          rgba(153,69,255,.38) 50%,
+          rgba(20,241,149,.30) 66%,
           rgba(0,0,0,0) 86%
-        ) 0 68% / 100% 3px no-repeat;
+        ) 0 70% / 100% 2px no-repeat;
 
-      filter: blur(.2px);
-      opacity: .85;
+      /* less aggressive */
+      opacity: .28;
+      filter: blur(1.4px);
       mix-blend-mode: screen;
+
+      /* mask: keep streaks more in background, less across the “content belt” */
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,.20) 18%,
+        rgba(0,0,0,.12) 42%,
+        rgba(0,0,0,.25) 70%,
+        rgba(0,0,0,1) 100%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,.20) 18%,
+        rgba(0,0,0,.12) 42%,
+        rgba(0,0,0,.25) 70%,
+        rgba(0,0,0,1) 100%
+      );
     }
 
-    /* ===== Bottom glow (свечение снизу как на 2-й картинке) ===== */
+    /* ===== Bottom glow (reduced intensity) ===== */
     body::after{
       content:"";
       position: fixed;
@@ -121,19 +125,36 @@
       z-index: 0;
 
       background:
-        radial-gradient(900px 220px at 50% 103%,
-          rgba(153,69,255,.28) 0%,
-          rgba(0,194,255,.18) 35%,
-          rgba(20,241,149,.14) 60%,
-          rgba(0,0,0,0) 75%
+        radial-gradient(900px 260px at 50% 103%,
+          rgba(153,69,255,.18) 0%,
+          rgba(0,194,255,.12) 35%,
+          rgba(20,241,149,.10) 60%,
+          rgba(0,0,0,0) 78%
         ),
-        radial-gradient(700px 240px at 72% 104%,
-          rgba(255,43,214,.14) 0%,
-          rgba(0,0,0,0) 70%
+        radial-gradient(650px 260px at 78% 104%,
+          rgba(255,43,214,.10) 0%,
+          rgba(0,0,0,0) 75%
         );
 
-      filter: blur(2px);
-      opacity: .95;
+      filter: blur(3px);
+      opacity: .70;
+    }
+
+    /* Subtle “noise” using gradients (no images) */
+    .noise{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 0;
+      background:
+        repeating-linear-gradient(0deg,
+          rgba(255,255,255,.018) 0px,
+          rgba(255,255,255,.018) 1px,
+          rgba(0,0,0,0) 2px,
+          rgba(0,0,0,0) 6px
+        );
+      opacity: .25;
+      mix-blend-mode: overlay;
     }
 
     a{ color: var(--text); text-underline-offset: 3px; }
@@ -144,7 +165,7 @@
       margin: 0 auto;
       padding: 28px 18px 64px;
       position: relative;
-      z-index: 1; /* above glow layers */
+      z-index: 1;
     }
 
     header{
@@ -152,7 +173,7 @@
       align-items:center;
       justify-content:space-between;
       gap:16px;
-      padding: 10px 0 22px;
+      padding: 10px 0 18px;
     }
 
     .brand{
@@ -162,14 +183,26 @@
       min-width: 0;
     }
 
+    /* BIGGER LOGO */
     .logo{
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
+      width: 78px;
+      height: 78px;
+      border-radius: 18px;
       object-fit: cover;
       border: 1px solid var(--line);
       background: #0d0d0f;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      box-shadow:
+        0 14px 40px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,255,255,.06),
+        0 0 26px rgba(0,194,255,.08),
+        0 0 26px rgba(153,69,255,.08);
+    }
+    @media (max-width: 520px){
+      .logo{
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+      }
     }
 
     .brand h1{
@@ -215,6 +248,25 @@
     }
     .chip:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
 
+    /* Thin accent line under header (subtle) */
+    .headerLine{
+      height: 2px;
+      width: 100%;
+      border-radius: 999px;
+      margin: 0 0 18px;
+      background: linear-gradient(90deg,
+        rgba(0,0,0,0) 0%,
+        rgba(20,241,149,.38) 24%,
+        rgba(0,194,255,.38) 46%,
+        rgba(153,69,255,.38) 68%,
+        rgba(255,43,214,.22) 82%,
+        rgba(0,0,0,0) 100%
+      );
+      opacity: .55;
+      filter: blur(.25px);
+      mix-blend-mode: screen;
+    }
+
     .hero{
       padding: 28px 22px;
       border: 1px solid var(--line);
@@ -224,22 +276,19 @@
       position: relative;
       overflow:hidden;
     }
-
-    /* subtle accent edge on hero */
     .hero::before{
       content:"";
       position:absolute;
       inset:-2px;
       border-radius: inherit;
-      background:
-        linear-gradient(90deg,
-          rgba(20,241,149,.22),
-          rgba(0,194,255,.22),
-          rgba(153,69,255,.22),
-          rgba(255,43,214,.14)
-        );
-      opacity:.35;
-      filter: blur(10px);
+      background: linear-gradient(90deg,
+        rgba(20,241,149,.18),
+        rgba(0,194,255,.18),
+        rgba(153,69,255,.18),
+        rgba(255,43,214,.10)
+      );
+      opacity:.28;
+      filter: blur(14px);
       z-index:0;
     }
     .hero > *{ position: relative; z-index:1; }
@@ -281,11 +330,14 @@
     }
 
     .card{
-      border: 1px solid var(--line);
+      border: 1px solid rgba(255,255,255,.08);
       border-radius: var(--radius);
       background: var(--panel);
       padding: 18px 18px 16px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+      box-shadow:
+        0 12px 40px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
     }
     .card h3{
       margin:0 0 8px;
@@ -359,7 +411,7 @@
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 12px 12px;
-      background: rgba(10,10,12,.55);
+      background: rgba(10,10,12,.58);
     }
     .kv b{
       display:block;
@@ -383,27 +435,25 @@
       justify-content:space-between;
       gap: 10px;
       flex-wrap: wrap;
-      position: relative;
     }
 
-    /* extra “footer glow strip” just under content (adds the “shine” feeling) */
+    /* Smaller, calmer bottom shine */
     .footerGlow{
-      height: 70px;
-      margin-top: 14px;
+      height: 54px;
+      margin-top: 12px;
       border-radius: 18px;
       border: 1px solid var(--line);
       background:
         linear-gradient(90deg,
           rgba(0,0,0,0) 0%,
-          rgba(20,241,149,.18) 20%,
-          rgba(0,194,255,.18) 40%,
-          rgba(153,69,255,.18) 60%,
-          rgba(255,43,214,.12) 75%,
+          rgba(20,241,149,.12) 26%,
+          rgba(0,194,255,.12) 48%,
+          rgba(153,69,255,.12) 70%,
+          rgba(255,43,214,.08) 82%,
           rgba(0,0,0,0) 100%
         );
-      filter: blur(.2px);
-      opacity: .85;
-      box-shadow: 0 25px 90px rgba(0,0,0,.35);
+      opacity: .55;
+      filter: blur(.35px);
       mix-blend-mode: screen;
     }
 
@@ -432,6 +482,8 @@
 </head>
 
 <body>
+  <div class="noise" aria-hidden="true"></div>
+
   <div class="wrap">
     <header>
       <div class="brand" aria-label="GPX site header">
@@ -449,6 +501,8 @@
         <a class="chip" href="#rules">Rules</a>
       </nav>
     </header>
+
+    <div class="headerLine" aria-hidden="true"></div>
 
     <main>
       <section class="hero" aria-label="Hero">
@@ -550,7 +604,6 @@
         <div>Verification-first reference page • GitHub Pages</div>
       </footer>
 
-      <!-- extra glow block near bottom (matches your 2nd image vibe) -->
       <div class="footerGlow" aria-hidden="true"></div>
     </main>
   </div>
