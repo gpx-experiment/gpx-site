@@ -4,134 +4,234 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GPX — Generative Price Experiment</title>
-  <meta name="description" content="GPX — on-chain price experiment on Solana. No utility. No roadmap. No promises." />
 
+  <meta name="description" content="GPX is an on-chain price experiment on Solana. No utility. No roadmap. No promises. Pure market observation." />
+
+  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#07070b;
-      --panel:rgba(255,255,255,.06);
-      --stroke:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.95);
-      --muted:rgba(255,255,255,.65);
+      --bg: #07070b;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+
       --g1:#14F195;
       --g2:#9945FF;
-      --radius:22px;
+
+      --radius: 22px;
       --shadow: 0 18px 60px rgba(0,0,0,.55);
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1200px 800px at 15% 20%, rgba(153,69,255,.28), transparent 55%),
-        radial-gradient(900px 600px at 80% 70%, rgba(20,241,149,.18), transparent 55%),
+        radial-gradient(1200px 800px at 15% 20%, rgba(153,69,255,.18), transparent 55%),
+        radial-gradient(900px 700px at 80% 80%, rgba(20,241,149,.18), transparent 55%),
         var(--bg);
     }
-    .wrap{max-width:1120px;margin:0 auto;padding:32px}
-    header{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      padding:18px 22px;border:1px solid var(--stroke);
-      border-radius:var(--radius);
-      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .brand{display:flex;gap:14px;align-items:center;min-width:240px}
-    .brand img{width:44px;height:44px;border-radius:14px;object-fit:cover}
-    .brand strong{font-size:15px;letter-spacing:.2px}
-    .sub{color:var(--muted);font-size:13px;margin-top:2px}
 
-    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:32px 24px 80px;
+    }
+
+    /* Header */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+      border:1px solid var(--stroke);
+      border-radius:20px;
+      padding:14px 18px;
+      backdrop-filter:blur(12px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo img{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:block;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.08),
+        0 10px 30px rgba(0,0,0,.45);
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:16px;
+      font-weight:600;
+    }
+
+    .brand .sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .nav{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
     .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.10);
-      color:rgba(255,255,255,.9);
-      font-size:13px;
-    }
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      text-decoration:none;font-weight:700;font-size:13px;
-      color:#000;
-      background:linear-gradient(135deg,var(--g1),var(--g2));
-      box-shadow: 0 10px 30px rgba(153,69,255,.18);
-    }
-    .btn.secondary{
-      color:rgba(255,255,255,.92);
-      background:rgba(255,255,255,.06);
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      font-size:12px;
+      border:1px solid var(--stroke);
     }
 
-    .grid{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:26px}
+    .btn{
+      padding:10px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--g1),var(--g2));
+      color:#000;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+    }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      gap:24px;
+      margin-top:28px;
+    }
+
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
       border:1px solid var(--stroke);
       border-radius:var(--radius);
-      padding:26px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      padding:28px;
+      box-shadow:var(--shadow);
     }
 
     .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.12);
-      font-size:13px;color:rgba(255,255,255,.9)
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--stroke);
+      font-size:12px;
+      color:var(--muted);
     }
-    .dot{width:8px;height:8px;border-radius:999px;background:linear-gradient(135deg,var(--g1),var(--g2))}
-    h1{font-size:46px;line-height:1.05;margin:14px 0 12px}
+
+    .title{
+      margin:18px 0 12px;
+      font-size:42px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
     .grad{
       background:linear-gradient(135deg,var(--g1),var(--g2));
-      -webkit-background-clip:text;background-clip:text;color:transparent
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
-    .lead{color:var(--muted);font-size:15px;line-height:1.55;max-width:62ch}
 
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-
-    .mintBox h3{margin:0 0 10px;font-size:16px}
-    .addr{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size:13px;line-height:1.45;
-      color:rgba(255,255,255,.78);
-      word-break: break-all;
-      padding:12px 14px;border-radius:14px;
-      background:rgba(0,0,0,.16);
-      border:1px solid rgba(255,255,255,.10);
+    .lead{
+      color:var(--muted);
+      font-size:15px;
+      max-width:520px;
     }
-    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
-    .rowCard{margin-top:22px}
-    .rowTitle{font-weight:800;margin-bottom:12px}
-    .row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .mini{
-      padding:16px;border-radius:18px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
+    .actions{
+      display:flex;
+      gap:12px;
+      margin-top:20px;
     }
-    .mini b{display:block;margin-bottom:6px}
-    .mini span{color:var(--muted);font-size:13px;line-height:1.45}
+
+    .btn.secondary{
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      border:1px solid var(--stroke);
+    }
+
+    /* Mint */
+    .mint-box{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .mint{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      padding:14px;
+      font-family:monospace;
+      font-size:13px;
+      word-break:break-all;
+    }
+
+    .tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .tag{
+      padding:6px 10px;
+      font-size:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--stroke);
+    }
+
+    /* Principles */
+    .principles{
+      margin-top:28px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .mini h3{
+      margin:0 0 6px;
+      font-size:16px;
+    }
+
+    .mini p{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+    }
 
     footer{
-      margin:36px 0 10px;
+      margin-top:40px;
       text-align:center;
-      color:rgba(255,255,255,.55);
       font-size:12px;
+      color:var(--muted);
     }
 
-    @media(max-width:940px){
-      .grid{grid-template-columns:1fr}
-      h1{font-size:40px}
-      .row{grid-template-columns:1fr}
-      .nav{justify-content:flex-start}
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .title{font-size:34px}
     }
   </style>
 </head>
@@ -139,67 +239,76 @@
 <body>
   <div class="wrap">
 
-    <header>
+    <!-- HEADER -->
+    <div class="topbar">
       <div class="brand">
-        <img src="logo.png" alt="GPX logo">
+        <div class="logo">
+          <img src="./logo.jpg" alt="GPX logo">
+        </div>
         <div>
-          <strong>GPX</strong>
+          <h1>GPX</h1>
           <div class="sub">Generative Price Experiment</div>
         </div>
       </div>
-
       <div class="nav">
         <div class="pill">Solana · On-chain</div>
-        <a class="btn secondary" href="#about">About</a>
-        <a class="btn" href="#mint">Mint</a>
+        <button class="btn">Mint</button>
       </div>
-    </header>
+    </div>
 
-    <section class="grid" id="about">
+    <!-- HERO -->
+    <div class="hero">
       <div class="card">
-        <div class="badge"><span class="dot"></span> No utility · No roadmap · No promises</div>
+        <div class="badge">No utility · No roadmap · No promises</div>
 
-        <h1><span class="grad">GPX</span> — on-chain<br>price experiment.</h1>
+        <div class="title">
+          <span class="grad">GPX</span> — on-chain<br>
+          price experiment.
+        </div>
 
         <p class="lead">
-          Pure market mechanics: liquidity, time, and behavior. No utility claims.
-          No expectations. Just observation.
+          Pure market mechanics: liquidity, time, and behavior.
+          No utility claims. No expectations. Just observation on Solana.
         </p>
 
         <div class="actions">
-          <button class="btn" id="copyBtn" type="button">Copy Mint</button>
-          <a class="btn secondary" href="https://github.com/gpx-experiment/gpx" target="_blank" rel="noreferrer">GitHub</a>
+          <button class="btn" id="copyBtn">Copy Mint</button>
+          <a href="https://github.com/gpx-experiment" target="_blank" class="btn secondary">GitHub</a>
         </div>
       </div>
 
-      <div class="card mintBox" id="mint">
-        <h3>Mint address</h3>
-        <div class="addr" id="mintText">G6VkMZDzFZ9jYgrSZXipMdohX3txQwf1hSnY1vSwqGV</div>
+      <!-- MINT -->
+      <div class="card mint-box">
+        <strong>Mint address</strong>
+        <div class="mint" id="mint">
+          G6VkMZDZFZ9jYgrSZXipMdohX3tQwf1hSnY1vSwqGV
+        </div>
         <div class="tags">
-          <div class="pill">SPL</div>
-          <div class="pill">Solana</div>
-          <div class="pill">Experimental</div>
+          <div class="tag">SPL</div>
+          <div class="tag">Solana</div>
+          <div class="tag">Experimental</div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="card rowCard">
-      <div class="rowTitle">Principles</div>
-      <div class="row">
+    <!-- PRINCIPLES -->
+    <div class="principles card">
+      <h2>Principles</h2>
+      <div class="grid">
         <div class="mini">
-          <b>Mechanics</b>
-          <span>How price behaves without narrative noise.</span>
+          <h3>Mechanics</h3>
+          <p>How price behaves without narrative noise.</p>
         </div>
         <div class="mini">
-          <b>Liquidity</b>
-          <span>The real physics of markets.</span>
+          <h3>Liquidity</h3>
+          <p>The real physics of markets.</p>
         </div>
         <div class="mini">
-          <b>Time</b>
-          <span>Expectations, cycles, reactions.</span>
+          <h3>Time</h3>
+          <p>Expectations, cycles, reactions.</p>
         </div>
       </div>
-    </section>
+    </div>
 
     <footer>
       © 2026 GPX · Hosted on GitHub Pages
@@ -208,25 +317,13 @@
   </div>
 
   <script>
-    // Copy mint
-    const mint = "G6VkMZDzFZ9jYgrSZXipMdohX3txQwf1hSnY1vSwqGV";
     const btn = document.getElementById("copyBtn");
+    const mint = document.getElementById("mint").innerText;
+
     btn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(mint);
-        const old = btn.textContent;
-        btn.textContent = "Copied ✅";
-        setTimeout(() => (btn.textContent = old), 1200);
-      } catch (e) {
-        // Fallback
-        const t = document.createElement("textarea");
-        t.value = mint; document.body.appendChild(t);
-        t.select(); document.execCommand("copy");
-        document.body.removeChild(t);
-        const old = btn.textContent;
-        btn.textContent = "Copied ✅";
-        setTimeout(() => (btn.textContent = old), 1200);
-      }
+      await navigator.clipboard.writeText(mint);
+      btn.innerText = "Copied ✓";
+      setTimeout(()=>btn.innerText="Copy Mint",1200);
     });
   </script>
 </body>
